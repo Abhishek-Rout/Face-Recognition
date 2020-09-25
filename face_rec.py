@@ -51,7 +51,7 @@ def classify_face(im):
 
     img = cv2.imread(im, cv2.IMREAD_UNCHANGED)
 
-    scale_percent = 120 # percent of original size ,can be used to adjust the image...
+    scale_percent = 120 # percent of original size ,can be used to adjust the image size...
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
