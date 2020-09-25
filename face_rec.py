@@ -13,11 +13,11 @@ def get_encoded_faces():
 
     :return: dict of (name, image encoded)
     """
-    encoded = {}
+    encoded={}
 
     for dirpath, dnames, fnames in os.walk("./faces"):
         for f in fnames:
-            if f.endswith(".jpg") or f.endswith(".png"):
+            if f.endswith(".jpg") or f.endswith(".png") or f.endswith(".jpeg"):
                 face = fr.load_image_file("faces/" + f)
                 encoding = fr.face_encodings(face)[0]
                 encoded[f.split(".")[0]] = encoding
@@ -47,8 +47,17 @@ def classify_face(im):
     faces_encoded = list(faces.values())
     known_face_names = list(faces.keys())
 
-    img = cv2.imread(im, 1)
-    #img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+    
+
+    img = cv2.imread(im, cv2.IMREAD_UNCHANGED)
+
+    scale_percent = 120 # percent of original size ,can be used to adjust the image...
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
+    dim = (width, height)
+
+    img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    #img = cv2.resize(img, (0, 0), fx=1.5, fy=1.5)
     #img = img[:,:,::-1]
  
     face_locations = face_recognition.face_locations(img)
@@ -85,7 +94,4 @@ def classify_face(im):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return face_names 
 
-
-print(classify_face("test.jpg"))
-
-
+print(classify_face("test.jpeg"))
